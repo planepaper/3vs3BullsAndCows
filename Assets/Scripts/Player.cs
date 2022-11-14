@@ -7,6 +7,19 @@ using Photon.Realtime;
 public class Player : MonoBehaviourPun
 {
     private GameController gameController;
+    private Rigidbody rigidbody;
+    private Transform transform;
+    private Animator animator;
+    [SerializeField]
+    private float walkSpeed = 6.0f;
+
+    // Start is called before the first frame update
+    void Awake()
+    {
+        rigidbody = GetComponent<Rigidbody>();
+        transform = GetComponent<Transform>();
+        animator = GetComponent<Animator>();
+    }
 
     private Rigidbody rigid;
     private Animator animator;
