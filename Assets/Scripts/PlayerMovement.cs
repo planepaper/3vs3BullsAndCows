@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviourPunCallbacks
 {
     private Rigidbody rigid;
     private Animator animator;
@@ -10,21 +12,42 @@ public class PlayerMovement : MonoBehaviour
     private float walkSpeed;
     [SerializeField]
     private float lookSensitivity;
+    [SerializeField]
+    private Weapon weapon;
 
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
         rigid = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
+        weapon = GetComponentInChildren<Weapon>();
+        gameObject.GetComponentInChildren<Camera>().tag = "MainCamera";
+        /*
+        if (photonView.IsMine) {
+            gameObject.GetComponentInChildren<Camera>().tag = "MainCamera";
+        }
+        */
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*
+        if (!photonView.IsMine) {
+            return;
+        }
+        */
         Attack();
+        
     }
     void FixedUpdate()
     {
+        /*
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+        */
         Move();
         Rotation();
     }
@@ -51,6 +74,15 @@ public class PlayerMovement : MonoBehaviour
         if (attack)
         {
             animator.SetTrigger("Attack");
+            weapon.Attack();
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Weapon" && other.gameObject != weapon)
+        {
+            Debug.Log($"{gameObject.name}가 맞았습니다.");
         }
     }
 }
