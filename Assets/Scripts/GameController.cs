@@ -10,7 +10,7 @@ public class GameController : MonoBehaviourPun
 
     private void Start()
     {
-        player = PhotonNetwork.Instantiate("Player", new Vector3(0f, 0.35f, -3f), Quaternion.identity);
+        player = PhotonNetwork.Instantiate("Player", new Vector3(3.7f, 0f, 0f), Quaternion.identity);
     }
 
     private void Update()
