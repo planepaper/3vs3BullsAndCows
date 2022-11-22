@@ -4,7 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class GameController : MonoBehaviourPun
+public class GameController : MonoBehaviourPunCallbacks
 {
     public static GameController Instance;
     public GameObject player;
@@ -13,9 +13,5 @@ public class GameController : MonoBehaviourPun
     {
         Instance = this;
         player = PhotonNetwork.Instantiate("Player", new Vector3(3.7f, 0f, 0f), Quaternion.identity);
-    }
-
-    private void Update()
-    {
     }
 }
