@@ -1332,6 +1332,7 @@ GameObject:
   - component: {fileID: 2874675221541469907}
   - component: {fileID: 3808327537224567213}
   - component: {fileID: 1854394091755414395}
+  - component: {fileID: -6486105718632097317}
   - component: {fileID: 6260371049087162093}
   - component: {fileID: 3714414409979644396}
   m_Layer: 0
@@ -1428,6 +1429,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 1854394091755414395}
+  - {fileID: -6486105718632097317}
+  - {fileID: 6260371049087162093}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -1447,6 +1450,33 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
+--- !u!114 &-6486105718632097317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3109045270886559616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c4a61274f60b4ea5fb4299cfdbf14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowLayerWeightsInspector: 1
+  ShowParameterInspector: 1
+  m_SynchronizeParameters:
+  - Type: 1
+    SynchronizeType: 1
+    Name: Vertical
+  - Type: 1
+    SynchronizeType: 1
+    Name: Horizontal
+  - Type: 9
+    SynchronizeType: 1
+    Name: Attack
+  m_SynchronizeLayers:
+  - SynchronizeType: 0
+    LayerIndex: 0
 --- !u!114 &6260371049087162093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1459,10 +1489,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef76f9cc108b42019afdfd11714ce1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 40
-  lookSensitivity: 5
   health: 10
   weapon: {fileID: 0}
+  playerUIprefab: {fileID: 5580273322530329747, guid: d6d9f42f5aa374a15ad18ac65108fb01, type: 3}
+  walkSpeed: 40
+  lookSensitivity: 5
 --- !u!114 &3714414409979644396
 MonoBehaviour:
   m_ObjectHideFlags: 0
