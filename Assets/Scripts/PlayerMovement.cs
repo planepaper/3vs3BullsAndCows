@@ -52,7 +52,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
         }
         processInputs();
 
-        Attack();
+        if (isAttacking)
+        {
+            photonView.RPC("Attack", RpcTarget.All);
+        }
         Move();
         Rotation();
 
@@ -65,12 +68,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         if (stream.IsWriting)
         {
-            stream.SendNext(isAttacking);
             stream.SendNext(health);
         }
         else
         {
-            isAttacking = (bool)stream.ReceiveNext();
             health = (int)stream.ReceiveNext();
         }
     }
@@ -98,12 +99,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
         isAttacking = Input.GetButtonDown("Fire1");
     }
 
+    [PunRPC]
     private void Attack() {
-        if (isAttacking)
-        {
-            animator.SetTrigger("Attack");
-            weapon.Attack();
-        }
+        animator.SetTrigger("Attack");
+        weapon.Attack();
     }
 
     private void OnTriggerEnter(Collider other)
