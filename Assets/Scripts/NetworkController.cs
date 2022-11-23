@@ -13,6 +13,8 @@ public class NetworkController : MonoBehaviourPunCallbacks
     private Text connectText;
     [SerializeField]
     private Button connectButton;
+    [SerializeField]
+    InputField playerNameInputField;
 
 
 
@@ -51,6 +53,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         connectText.text = "Success to join in the room";
+        PhotonNetwork.NickName = playerNameInputField.text;
         PhotonNetwork.LoadLevel("NetworkDemoScene");
     }
 
