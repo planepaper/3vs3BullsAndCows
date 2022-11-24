@@ -7,7 +7,7 @@ using Photon.Realtime;
 public class Player : MonoBehaviourPun
 {
     private GameController gameController;
-
+    
     private Rigidbody rigid;
     private Animator animator;
     [SerializeField]
