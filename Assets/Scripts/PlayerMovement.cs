@@ -62,8 +62,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
         if (health <= 0f) {
             //gameover;
             Debug.Log($"{photonView.Owner.NickName} is retired");
-            Destroy(this.gameObject);
-            return;
         }
     }
 
