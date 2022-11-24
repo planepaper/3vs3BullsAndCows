@@ -12,12 +12,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private float walkSpeed;
     [SerializeField]
     private float lookSensitivity;
-
-    [SerializeField]
-    private int health = 10;
     [SerializeField]
     private Weapon weapon;
-
 
     // Start is called before the first frame update
     void Start()
@@ -25,27 +21,35 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         rigid = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         weapon = GetComponentInChildren<Weapon>();
-
-        CameraMovement camera = GetComponent<CameraMovement>();
-        if (camera != null && photonView.IsMine) {
-            camera.OnStartFollowing();
+        gameObject.GetComponentInChildren<Camera>().tag = "MainCamera";
+        /*
+        if (photonView.IsMine) {
+            gameObject.GetComponentInChildren<Camera>().tag = "MainCamera";
         }
+        */
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*
         if (!photonView.IsMine) {
             return;
         }
+        */
         Attack();
+        
+    }
+    void FixedUpdate()
+    {
+        /*
+        if (!photonView.IsMine)
+        {
+            return;
+        }
+        */
         Move();
         Rotation();
-
-        if (health <= 0f) {
-            //gameover;
-            Debug.Log($"{this.gameObject.name} is retired");
-        }
     }
 
     void Move() {
@@ -59,14 +63,11 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         animator.SetFloat("Horizontal", h, h * 0.1f, Time.deltaTime);
         animator.SetFloat("Vertical", v, v * 0.1f, Time.deltaTime);
     }
-
     void Rotation() {
         float yRotation = Input.GetAxisRaw("Mouse X");
         Vector3 charactorRotationY = new Vector3(0f, yRotation, 0f) * lookSensitivity;
-        transform.rotation = transform.rotation * Quaternion.Euler(charactorRotationY);
-
+        rigid.MoveRotation(rigid.rotation * Quaternion.Euler(charactorRotationY));
     }
-
     void Attack() {
         bool attack = Input.GetButtonDown("Fire1");
 
@@ -79,15 +80,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
-
         if (other.gameObject.tag == "Weapon" && other.gameObject != weapon)
         {
-            health -= 1;
-            Debug.Log($"{this.gameObject.name}가 맞았습니다.\n 현재체력 : {health}");
+            Debug.Log($"{gameObject.name}가 맞았습니다.");
         }
     }
 }
