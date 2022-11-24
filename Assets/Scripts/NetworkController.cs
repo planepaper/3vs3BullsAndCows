@@ -54,7 +54,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     {
         connectText.text = "Success to join in the room";
         PhotonNetwork.NickName = playerNameInputField.text;
-        PhotonNetwork.LoadLevel("NetworkDemoScene");
+        PhotonNetwork.LoadLevel("SampleScene");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
