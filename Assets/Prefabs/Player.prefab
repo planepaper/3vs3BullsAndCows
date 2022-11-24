@@ -1330,10 +1330,8 @@ GameObject:
   - component: {fileID: 8542889012975677248}
   - component: {fileID: 2874675221541469904}
   - component: {fileID: 2874675221541469907}
-  - component: {fileID: 3808327537224567213}
-  - component: {fileID: 1854394091755414395}
-  - component: {fileID: 6260371049087162093}
-  - component: {fileID: 3714414409979644396}
+  - component: {fileID: 2874675221541469905}
+  - component: {fileID: 2433818319500417618}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1408,46 +1406,7 @@ CapsuleCollider:
   m_Height: 1.4
   m_Direction: 1
   m_Center: {x: 0, y: 0.7, z: 0}
---- !u!114 &3808327537224567213
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3109045270886559616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  Synchronization: 3
-  OwnershipTransfer: 0
-  observableSearch: 2
-  ObservedComponents:
-  - {fileID: 1854394091755414395}
-  sceneViewId: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &1854394091755414395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3109045270886559616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
---- !u!114 &6260371049087162093
+--- !u!114 &2874675221541469905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1459,11 +1418,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef76f9cc108b42019afdfd11714ce1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 40
-  lookSensitivity: 5
+  walkSpeed: 5
+  lookSensitivity: 20
   health: 10
-  weapon: {fileID: 0}
---- !u!114 &3714414409979644396
+  weapon: {fileID: 2874675221720507562}
+--- !u!114 &2433818319500417618
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1479,6 +1438,7 @@ MonoBehaviour:
   height: 2
   centerOffset: {x: 0, y: 1, z: 0}
   followOnStart: 0
+  smoothSpeed: 0.125
 --- !u!1 &3130341311997574114
 GameObject:
   m_ObjectHideFlags: 0

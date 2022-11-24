@@ -4,23 +4,19 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
+public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-    public static int MaxHealth = 10;
-    public int health = MaxHealth;
-
     private Rigidbody rigid;
     private Animator animator;
-    [SerializeField]
-    private Weapon weapon;
-    [SerializeField]
-    private GameObject playerUIprefab;
     [SerializeField]
     private float walkSpeed;
     [SerializeField]
     private float lookSensitivity;
-    private bool isAttacking;
 
+    [SerializeField]
+    private int health = 10;
+    [SerializeField]
+    private Weapon weapon;
 
 
     // Start is called before the first frame update
@@ -31,51 +27,28 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
         weapon = GetComponentInChildren<Weapon>();
 
         CameraMovement camera = GetComponent<CameraMovement>();
-        if (photonView.IsMine) {
+        if (camera != null && photonView.IsMine) {
             camera.OnStartFollowing();
-        }
-        if (playerUIprefab)
-        {
-            GameObject _ui = Instantiate(playerUIprefab);
-            _ui.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
-        }
-        else {
-            Debug.LogWarning("<Color=Red><a>Missing</a></Color> PlayerUIPrefab reference on player Prefab", this);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!photonView.IsMine && PhotonNetwork.IsConnected) {
+        if (!photonView.IsMine) {
             return;
         }
-        processInputs();
-
         Attack();
         Move();
         Rotation();
 
         if (health <= 0f) {
             //gameover;
-            Debug.Log($"{photonView.Owner.NickName} is retired");
+            Debug.Log($"{this.gameObject.name} is retired");
         }
     }
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(isAttacking);
-            stream.SendNext(health);
-        }
-        else
-        {
-            isAttacking = (bool)stream.ReceiveNext();
-            health = (int)stream.ReceiveNext();
-        }
-    }
-
-    private void Move() {
+    void Move() {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
         Vector3 moveHorizontal = transform.right * h;
@@ -87,19 +60,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
         animator.SetFloat("Vertical", v, v * 0.1f, Time.deltaTime);
     }
 
-    private void Rotation() {
+    void Rotation() {
         float yRotation = Input.GetAxisRaw("Mouse X");
         Vector3 charactorRotationY = new Vector3(0f, yRotation, 0f) * lookSensitivity;
         transform.rotation = transform.rotation * Quaternion.Euler(charactorRotationY);
 
     }
 
-    private void processInputs() {
-        isAttacking = Input.GetButtonDown("Fire1");
-    }
+    void Attack() {
+        bool attack = Input.GetButtonDown("Fire1");
 
-    private void Attack() {
-        if (isAttacking)
+        if (attack)
         {
             animator.SetTrigger("Attack");
             weapon.Attack();
@@ -116,7 +87,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks, IPunObservable
         if (other.gameObject.tag == "Weapon" && other.gameObject != weapon)
         {
             health -= 1;
-            Debug.Log($"{photonView.Owner.NickName}가 맞았습니다.\n 현재체력 : {health}");
+            Debug.Log($"{this.gameObject.name}가 맞았습니다.\n 현재체력 : {health}");
         }
     }
 }
