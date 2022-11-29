@@ -13,13 +13,14 @@ public class PlayerUI : MonoBehaviour
     private Vector3 screenOffset = new Vector3(0f, 30f, 0f);
     private float characterControllerHeight = 0f;
 
-    private PlayerMovement target;
+    private PlayerController target;
 
     private void Awake()
     {
         this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
         PlayerHealthSlider.interactable = false;
-        PlayerHealthSlider.maxValue = PlayerMovement.MaxHealth;
+        PlayerHealthSlider.maxValue = PlayerController.MaxHealth;
+
     }
 
     void Update()
@@ -45,7 +46,7 @@ public class PlayerUI : MonoBehaviour
         }
     }
 
-    public void SetTarget(PlayerMovement _target) {
+    public void SetTarget(PlayerController _target) {
         if (!_target) {
             return;
         }

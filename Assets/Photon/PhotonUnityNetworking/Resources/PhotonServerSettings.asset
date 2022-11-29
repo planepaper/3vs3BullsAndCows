@@ -42,6 +42,7 @@ MonoBehaviour:
   - HitBall
   - ActionHitting
   - Attack
+  - Dead
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
