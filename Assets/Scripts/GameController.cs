@@ -12,6 +12,6 @@ public class GameController : MonoBehaviourPunCallbacks
     private void Start()
     {
         Instance = this;
-        player = PhotonNetwork.Instantiate("Player", new Vector3(-158f, 5f, 250f), Quaternion.identity);
+        player = PhotonNetwork.Instantiate("Player", new Vector3(-172, 5f, 225), Quaternion.identity);
     }
 }
