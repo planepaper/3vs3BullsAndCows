@@ -10,11 +10,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public InteractiveObject interactObj;
 
     private Animator animator;
-    [SerializeField]
+    private Collider collider;
+    private Rigidbody rigid;
+    private AudioSource audioSource;
     private Weapon weapon;
     [SerializeField]
     private GameObject playerUIprefab;
 
+    [SerializeField]
+    private float knockbackPower;
     private bool isAlive = true;
     private bool isAttacking;
     private bool isInteract;
@@ -23,7 +27,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     void Start()
     {
         animator = GetComponent<Animator>();
+        collider = GetComponent<CapsuleCollider>();
+        rigid = GetComponent<Rigidbody>();
         weapon = GetComponentInChildren<Weapon>();
+        audioSource = GetComponent<AudioSource>();
         if (playerUIprefab)
         {
             GameObject _ui = Instantiate(playerUIprefab);
@@ -98,6 +105,15 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     }
 
+    private void OnDamaged(Vector3 hitPoint) {
+        Vector3 direction = new Vector3(transform.position.x - hitPoint.x, 0, transform.position.z - hitPoint.z).normalized;
+        Debug.Log(direction);
+        rigid.AddForce(knockbackPower * direction, ForceMode.Impulse);
+        health -= 1;
+        audioSource.Play();
+        Debug.Log($"{photonView.Owner.NickName}가 맞았습니다.\n 현재체력 : {health}");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (!photonView.IsMine)
@@ -107,8 +123,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (other.gameObject.tag == "Weapon" && other.gameObject != weapon)
         {
-            health -= 1;
-            Debug.Log($"{photonView.Owner.NickName}가 맞았습니다.\n 현재체력 : {health}");
+            OnDamaged(collider.ClosestPoint(other.transform.position));
         }
     }
 }
