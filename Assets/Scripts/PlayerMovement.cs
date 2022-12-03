@@ -7,19 +7,24 @@ using System.Threading;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
-
     private Rigidbody rigid;
     private Animator animator;
     [SerializeField]
     private Weapon weapon;
     [SerializeField]
+    public LayerMask ground;
+    [SerializeField]
+    public float groundDistance;
+    [SerializeField]
     private float walkSpeed;
     [SerializeField]
     private float jumpPower;
-
     [SerializeField]
     private float lookSensitivity;
     private bool isJumping;
+    [SerializeField]
+    private bool isGrounded;
+
 
 
 
@@ -47,9 +52,15 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Rotation();
     }
 
+    private void LateUpdate()
+    {
+        animator.ResetTrigger("Jump");
+    }
+
     private void processInputs()
     {
         isJumping = Input.GetButtonDown("Jump");
+        checkGround();
     }
 
 
@@ -59,17 +70,19 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         float v = Input.GetAxisRaw("Vertical");
         Vector3 moveHorizontal = transform.right * h;
         Vector3 moveVertical = transform.forward * v;
-
+        
 
         Vector3 velocity = (moveHorizontal + moveVertical).normalized * walkSpeed;
         rigid.MovePosition(rigid.position + velocity * Time.deltaTime);
         animator.SetFloat("Horizontal", h, h * 0.1f, Time.deltaTime);
         animator.SetFloat("Vertical", v, v * 0.1f, Time.deltaTime);
         animator.SetBool("Move", h != 0 || v != 0);
-        if (isJumping)
+
+        if (isJumping && isGrounded) 
         {
             animator.SetTrigger("Jump");
             rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+
         }
     }
 
@@ -77,5 +90,17 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         float yRotation = Input.GetAxisRaw("Mouse X");
         Vector3 charactorRotationY = new Vector3(0f, yRotation, 0f) * lookSensitivity;
         transform.rotation = transform.rotation * Quaternion.Euler(charactorRotationY);
+    }
+
+    private void checkGround() {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, groundDistance, ground))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            isGrounded = false;
+        }
     }
 }

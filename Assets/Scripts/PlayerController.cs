@@ -58,6 +58,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
+    void LateUpdate()
+    {
+        animator.ResetTrigger("Attack");
+    }
+
     private void processInputs()
     {
         isAttacking = Input.GetButtonDown("Fire1");

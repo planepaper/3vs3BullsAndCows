@@ -1474,9 +1474,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 0}
-  walkSpeed: 10
+  ground:
+    serializedVersion: 2
+    m_Bits: 8
+  groundDistance: 1.1
+  walkSpeed: 5
   jumpPower: 10
   lookSensitivity: 5
+  isGrounded: 0
 --- !u!114 &3714414409979644396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1538,7 +1543,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!1 &3130341311997574114
 GameObject:
   m_ObjectHideFlags: 0
