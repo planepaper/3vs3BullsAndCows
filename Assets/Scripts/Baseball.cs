@@ -21,4 +21,9 @@ public class Baseball : MonoBehaviour
     {
         Debug.Log("들어옴");
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Debug.Log("stay");
+    }
 }

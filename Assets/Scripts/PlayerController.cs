@@ -6,8 +6,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static int MaxHealth = 10;
+    public static int InitialBall = 0;
     public int health = MaxHealth;
     public InteractiveObject interactObj;
+    public int ball = InitialBall;
 
     private Animator animator;
     private Collider collider;
