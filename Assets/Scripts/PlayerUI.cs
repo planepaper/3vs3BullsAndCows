@@ -5,12 +5,16 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
+    public static int InitialBall = 0;
+    public int ball = InitialBall;
     [SerializeField]
     private Text playerNameText;
     [SerializeField]
     private Slider PlayerHealthSlider;
     [SerializeField]
     private Vector3 screenOffset = new Vector3(0f, 30f, 0f);
+    [SerializeField]
+    private Text ballAmountText;
     private float characterControllerHeight = 0f;
 
     private PlayerController target;

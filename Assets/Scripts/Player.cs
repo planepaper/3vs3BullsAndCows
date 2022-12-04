@@ -1,11 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
 public class Player : MonoBehaviourPun
 {
+    
     private GameController gameController;
     
     private Rigidbody rigid;
@@ -16,6 +17,9 @@ public class Player : MonoBehaviourPun
     private float lookSensitivity;
     [SerializeField]
     private Weapon weapon;
+    
+
+
 
     private void Start()
     {
@@ -24,6 +28,7 @@ public class Player : MonoBehaviourPun
         rigid = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         weapon = GetComponentInChildren<Weapon>();
+        
 
         if (photonView.IsMine)
         {

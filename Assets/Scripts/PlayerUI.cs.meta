@@ -3,7 +3,10 @@ guid: 8478187d7828548c292f9a1068a2d265
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerNameText: {instanceID: 0}
+  - PlayerHealthSlider: {instanceID: 0}
+  - ballAmountText: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

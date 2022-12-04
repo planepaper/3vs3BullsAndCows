@@ -30,6 +30,7 @@ public class InteractiveObject : MonoBehaviour
 
             player = other.gameObject.GetComponent<PlayerController>();
             other.gameObject.GetComponent<PlayerController>().interactObj = this;
+            TurnOnUI();
         }
     }
 
