@@ -36,12 +36,13 @@ public class InteractiveObject : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        TurnOffUI();
         Debug.Log("나감");
         if (other.gameObject == player.gameObject)
         {
             player = null;
-            TurnOffUI();
         }
+        
     }
 
     public void TurnOnUI() {

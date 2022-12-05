@@ -17,6 +17,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private GameObject playerUIprefab;
 
+    public static int InitialBall = 0;
+    public int ball = InitialBall;
     [SerializeField]
     private float knockbackPower;
     private bool isAlive = true;
@@ -63,6 +65,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             photonView.RPC("Dead", RpcTarget.All);
             return;
         }
+
     }
 
     void LateUpdate()
@@ -125,5 +128,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             OnDamaged(collider.ClosestPoint(other.transform.position));
         }
+        
     }
 }

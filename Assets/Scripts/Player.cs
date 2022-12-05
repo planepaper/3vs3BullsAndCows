@@ -21,6 +21,7 @@ public class Player : MonoBehaviourPun
 
 
 
+
     private void Start()
     {
         gameController = GameObject.Find("GameController").GetComponent<GameController>();

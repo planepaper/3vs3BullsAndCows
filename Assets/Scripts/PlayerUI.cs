@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class PlayerUI : MonoBehaviour
 {
-    public static int InitialBall = 0;
-    public int ball = InitialBall;
+    
     [SerializeField]
     private Text playerNameText;
     [SerializeField]
@@ -14,9 +13,9 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     private Vector3 screenOffset = new Vector3(0f, 30f, 0f);
     [SerializeField]
-    private Text ballAmountText;
     private float characterControllerHeight = 0f;
-
+    [SerializeField]
+    private Text ballAmountText;
     private PlayerController target;
 
     private void Awake()
@@ -24,7 +23,7 @@ public class PlayerUI : MonoBehaviour
         this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
         PlayerHealthSlider.interactable = false;
         PlayerHealthSlider.maxValue = PlayerController.MaxHealth;
-
+        ballAmountText.text = PlayerController.InitialBall.ToString();
     }
 
     void Update()
@@ -39,6 +38,7 @@ public class PlayerUI : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
+        ballAmountText.text = target.ball.ToString();
     }
     private void LateUpdate()
     {

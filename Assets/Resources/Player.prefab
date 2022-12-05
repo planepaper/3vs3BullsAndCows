@@ -1611,6 +1611,7 @@ MonoBehaviour:
   health: 10
   interactObj: {fileID: 0}
   playerUIprefab: {fileID: 5580273322530329747, guid: d6d9f42f5aa374a15ad18ac65108fb01, type: 3}
+  ball: 0
   knockbackPower: 10
 --- !u!136 &9096642234393888506
 CapsuleCollider:
