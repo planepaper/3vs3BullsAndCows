@@ -1611,12 +1611,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
-  balls: 3
+  ball: 0
   interactObj: {fileID: 0}
   spawnPoint: {fileID: 0}
   playerUIprefab: {fileID: 5580273322530329747, guid: d6d9f42f5aa374a15ad18ac65108fb01, type: 3}
   RespawnUIprefab: {fileID: 585825278496945291, guid: a66b60878a2274e4790899609c2dc6f9, type: 3}
-  ball: 0
   knockbackPower: 10
   respawnTime: 10
 --- !u!136 &9096642234393888506

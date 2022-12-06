@@ -7,8 +7,9 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static int MaxHealth = 10;
+    public static int InitialBall = 0;
     public int health = MaxHealth;
-    public int balls;
+    public int ball = InitialBall;
     public InteractiveObject interactObj;
     public GameObject spawnPoint;
 
@@ -22,8 +23,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [SerializeField]
     private GameObject playerUIprefab;
 
-    public static int InitialBall = 0;
-    public int ball = InitialBall;
     [SerializeField]
     private GameObject RespawnUIprefab;
     [SerializeField]
@@ -96,10 +95,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(health);
+            stream.SendNext(ball);
         }
         else
         {
             health = (int)stream.ReceiveNext();
+            ball = (int)stream.ReceiveNext();
         }
     }
 
@@ -114,12 +115,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Dead()
     {
         isAlive = false;
-        if (photonView.IsMine)
-        {
-            Debug.Log(killedBy.photonView.Owner.NickName);
-            killedBy.balls += balls;
-            balls = 0;
-        }
+        Debug.Log(killedBy.photonView.Owner.NickName);
+        killedBy.ball += ball;
+        ball = 0;
         movementController.SetActive(false);
         animator.SetTrigger("Death");
         StartCoroutine("Respown");
