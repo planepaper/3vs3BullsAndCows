@@ -10,6 +10,7 @@ public class PlayerUI : MonoBehaviour
     private Text playerNameText;
     [SerializeField]
     private Slider PlayerHealthSlider;
+    [SerializeField]
     private GameObject fillArea;
     [SerializeField]
     private Vector3 screenOffset;
@@ -21,8 +22,8 @@ public class PlayerUI : MonoBehaviour
 
     private void Awake()
     {
-        this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
-        fillArea = transform.Find("Fill Area").gameObject;
+        //this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
+        //fillArea = transform.Find("Fill Area").gameObject;
         PlayerHealthSlider.interactable = false;
         PlayerHealthSlider.maxValue = PlayerController.MaxHealth;
         ballAmountText.text = PlayerController.InitialBall.ToString();
@@ -52,7 +53,10 @@ public class PlayerUI : MonoBehaviour
             Vector3 targetPosition;
             targetPosition = target.transform.position;
             targetPosition.y += characterControllerHeight;
-            this.transform.position = Camera.main.WorldToScreenPoint(targetPosition) + screenOffset;
+            this.transform.position = targetPosition;
+            this.transform.LookAt(Camera.main.transform);
+
+            //this.transform.position = Camera.main.WorldToScreenPoint(targetPosition) + screenOffset;
         }
     }
 
