@@ -8,22 +8,37 @@ public class GameController : MonoBehaviourPunCallbacks
 {
     public static GameController Instance;
     public GameObject player;
+    public char team;
     public List<GameObject> ballPositions;
     public List<GameObject> activeBalls;
-    
+
 
 
     private void Start()
     {
         Instance = this;
-        player = PhotonNetwork.Instantiate("Player", new Vector3(-172, 5f, 225), Quaternion.identity);
+
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount % 2 == 1)
+        {
+            player = PhotonNetwork.Instantiate("PlayerA", new Vector3(-172, 5f, 225), Quaternion.identity);
+            team = 'A';
+        }
+        else
+        {
+            player = PhotonNetwork.Instantiate("PlayerB", new Vector3(-172, 5f, 225), Quaternion.identity);
+            team = 'B';
+        }
+
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
         InstantiateBalls();
     }
 
-    private void InstantiateBalls() {
-        if (!PhotonNetwork.IsMasterClient) {
+    private void InstantiateBalls()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+        {
             return;
         }
         int num = Random.Range(0, 4);
