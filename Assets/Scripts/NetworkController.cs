@@ -62,6 +62,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
         connectText.text = "Fail to join in the room. Make new room.";
         Debug.Log($"{returnCode} : {message}");
         connectButton.enabled = false;
-        PhotonNetwork.CreateRoom("test", new RoomOptions { MaxPlayers = 2 });
+        PhotonNetwork.CreateRoom("test", new RoomOptions { MaxPlayers = 6 });
     }
 }
