@@ -11,22 +11,27 @@ public class GameController : MonoBehaviourPunCallbacks
     public char team;
     public List<GameObject> ballPositions;
     public List<GameObject> activeBalls;
+    public List<GameObject> respownPoints;
 
 
 
     private void Start()
     {
         Instance = this;
-
+        PlayerController playerController;
 
         if (PhotonNetwork.CurrentRoom.PlayerCount % 2 == 1)
         {
             player = PhotonNetwork.Instantiate("PlayerA", new Vector3(-172, 5f, 225), Quaternion.identity);
+            playerController = player.gameObject.GetComponent<PlayerController>();
+            playerController.spawnPoint = respownPoints[0].transform.position;
             team = 'A';
         }
         else
         {
             player = PhotonNetwork.Instantiate("PlayerB", new Vector3(-172, 5f, 225), Quaternion.identity);
+            playerController = player.gameObject.GetComponent<PlayerController>();
+            playerController.spawnPoint = respownPoints[1].transform.position;
             team = 'B';
         }
 

@@ -11,8 +11,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public int health = MaxHealth;
     public int ball = InitialBall;
     public InteractiveObject interactObj;
-    public GameObject spawnPoint;
-    public string id;
+    public Vector3 spawnPoint;
 
     private Animator animator;
     private Collider collid;
@@ -33,7 +32,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private bool isAlive = true;
     private bool isAttacking;
     private bool isInteract;
-
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -43,9 +42,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         weapon = GetComponentInChildren<Weapon>();
         audioSource = GetComponent<AudioSource>();
         movementController = GetComponent<PlayerMovement>();
-        id = PhotonNetwork.LocalPlayer.UserId;
-
-        spawnPoint = GameObject.Find("SpawnPoint/Point1");
         if (playerUIprefab)
         {
             GameObject _ui = Instantiate(playerUIprefab);
@@ -102,13 +98,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             stream.SendNext(health);
             stream.SendNext(ball);
+            stream.SendNext(spawnPoint);
+            
         }
         else
         {
             health = (int)stream.ReceiveNext();
             ball = (int)stream.ReceiveNext();
+            spawnPoint = (Vector3)stream.ReceiveNext();
         }
     }
+
 
     [PunRPC]
     private void Attack()
@@ -126,10 +126,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         ball = 0;
         movementController.SetActive(false);
         animator.SetTrigger("Death");
-        StartCoroutine("Respown");
+        StartCoroutine("WaitRespown");
     }
 
-    private IEnumerator Respown() {
+    private IEnumerator WaitRespown() {
         GameObject respawnUIObject = null;
         Text respawnUI = null;
         if (photonView.IsMine)
@@ -145,16 +145,24 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             }
             yield return new WaitForSeconds(1.0f);
         }
-        isAlive = true;
-        health = MaxHealth;
-        killedBy = null;
-        movementController.SetActive(true);
-        transform.position = spawnPoint.transform.position;
-        animator.SetTrigger("Respawn");
+        Respown();
         if (photonView.IsMine)
         {
             Destroy(respawnUIObject);
         }
+    }
+
+    private void Respown() {
+        isAlive = true;
+        health = MaxHealth;
+        killedBy = null;
+        movementController.SetActive(true);
+        animator.SetTrigger("Respawn");
+        if (photonView.IsMine)
+        {
+            transform.position = spawnPoint;
+        }
+
     }
 
     [PunRPC]
@@ -188,4 +196,5 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             interactObj = null;
         }
     }
+
 }
