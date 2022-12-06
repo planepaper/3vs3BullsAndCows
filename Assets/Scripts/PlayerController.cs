@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public int ball = InitialBall;
     public InteractiveObject interactObj;
     public Vector3 spawnPoint;
+    public char team;
 
     private Animator animator;
     private Collider collid;
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         weapon = GetComponentInChildren<Weapon>();
         audioSource = GetComponent<AudioSource>();
         movementController = GetComponent<PlayerMovement>();
+        weapon.team = team;
         if (playerUIprefab)
         {
             GameObject _ui = Instantiate(playerUIprefab);
@@ -171,18 +173,21 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         rigid.AddForce(knockbackPower * direction, ForceMode.Impulse);
         health -= 1;
         audioSource.Play();
-        //Debug.Log($"{photonView.Owner.NickName}가 맞았습니다.\n 현재체력 : {health}");
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
-        if (other.gameObject.tag == "Weapon" && other.gameObject != weapon)
+        GameObject otherObject = other.gameObject;
+        if (otherObject.tag == "Weapon")
         {
-            photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(other.transform.position));
-            killedBy = other.gameObject.GetComponentInParent<PlayerController>();
+            bool isMine = otherObject != weapon.gameObject;
+            bool isTeam = otherObject.GetComponent<Weapon>().team == team;
+            if (!isMine && !isTeam) {
+                photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(other.transform.position));
+                killedBy = other.gameObject.GetComponentInParent<PlayerController>();
+            }
         }
-        if(other.gameObject.tag == "Interactive")
+        if(otherObject.tag == "Interactive")
         {
             interactObj = other.gameObject.GetComponent<InteractiveObject>();
         }

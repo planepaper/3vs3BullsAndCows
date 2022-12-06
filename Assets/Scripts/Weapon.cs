@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public char team;
     CapsuleCollider weaponCollider;
     AudioSource audioSource;
+
     void Start()
     {
         weaponCollider = GetComponent<CapsuleCollider>();
