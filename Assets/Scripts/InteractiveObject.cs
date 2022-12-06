@@ -1,64 +1,41 @@
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
-public class InteractiveObject : MonoBehaviour
+public abstract class InteractiveObject : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     GameObject uiPrefab;
     GameObject ui;
-    PlayerController player;
+    protected GameObject canvas;
     bool isUIOpen= false;
 
-    // Start is called before the first frame update
-    void Start()
+    protected void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("들어옴");
-        if (other.CompareTag("Player") && player == null)
-        {
-
-            player = other.gameObject.GetComponent<PlayerController>();
-            other.gameObject.GetComponent<PlayerController>().interactObj = this;
-            TurnOnUI();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        TurnOffUI();
-        Debug.Log("나감");
-        if (other.gameObject == player.gameObject)
-        {
-            player = null;
-        }
-        
+        canvas = GameObject.FindWithTag("Canvas");
     }
 
     public void TurnOnUI() {
         if (isUIOpen) {
             return;
         }
+        Debug.Log("UI 호출");
         ui = Instantiate(uiPrefab);
-        ui.transform.SetParent(GameObject.Find("Canvas").transform, false);
+        ui.transform.SetParent(canvas.transform, false);
         isUIOpen = true;
     }
 
     public void TurnOffUI()
     {
-        Debug.Log("지워짐");
+        if (!isUIOpen)
+        {
+            return;
+        }
         Destroy(ui);
         isUIOpen = false;
     }
+
+    abstract public void Interact(GameObject other);
 
 }

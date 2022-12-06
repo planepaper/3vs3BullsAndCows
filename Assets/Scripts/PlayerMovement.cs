@@ -92,7 +92,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private void Rotation() {
         float yRotation = Input.GetAxisRaw("Mouse X");
         Vector3 charactorRotationY = new Vector3(0f, yRotation, 0f) * lookSensitivity;
-        transform.rotation = transform.rotation * Quaternion.Euler(charactorRotationY);
+        if (yRotation != 0) {
+            transform.rotation = transform.rotation * Quaternion.Euler(charactorRotationY);
+        }
+        
     }
 
     private void checkGround() {

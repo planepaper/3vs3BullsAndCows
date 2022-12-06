@@ -1614,6 +1614,7 @@ MonoBehaviour:
   ball: 0
   interactObj: {fileID: 0}
   spawnPoint: {fileID: 0}
+  id: 
   playerUIprefab: {fileID: 5833015466173722988, guid: bc90492adc6354bfc89645e9b8046cca, type: 3}
   RespawnUIprefab: {fileID: 585825278496945291, guid: a66b60878a2274e4790899609c2dc6f9, type: 3}
   knockbackPower: 10

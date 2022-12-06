@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public int ball = InitialBall;
     public InteractiveObject interactObj;
     public GameObject spawnPoint;
+    public string id;
 
     private Animator animator;
     private Collider collid;
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         weapon = GetComponentInChildren<Weapon>();
         audioSource = GetComponent<AudioSource>();
         movementController = GetComponent<PlayerMovement>();
+        id = PhotonNetwork.LocalPlayer.UserId;
 
         spawnPoint = GameObject.Find("SpawnPoint/Point1");
         if (playerUIprefab)
@@ -68,8 +70,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             photonView.RPC("Attack", RpcTarget.All);
         }
-        if (isInteract && interactObj != null) {
+        if (interactObj != null)
+        {
             interactObj.TurnOnUI();
+        }
+        if (isInteract && interactObj != null) {
+            interactObj.Interact(this.gameObject);
         }
         if (health <= 0f)
         {
@@ -168,6 +174,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(other.transform.position));
             killedBy = other.gameObject.GetComponentInParent<PlayerController>();
         }
+        if(other.gameObject.tag == "Interactive")
+        {
+            interactObj = other.gameObject.GetComponent<InteractiveObject>();
+        }
         
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "Interactive") {
+            interactObj.TurnOffUI();
+            interactObj = null;
+        }
     }
 }

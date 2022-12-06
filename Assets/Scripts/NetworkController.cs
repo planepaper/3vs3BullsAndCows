@@ -7,7 +7,7 @@ using Photon.Realtime;
 
 public class NetworkController : MonoBehaviourPunCallbacks
 {
-    private string gameVersion = "1";
+    private string gameVersion = "2";
 
     [SerializeField]
     private Text connectText;
@@ -60,6 +60,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         connectText.text = "Fail to join in the room. Make new room.";
+        Debug.Log($"{returnCode} : {message}");
         connectButton.enabled = false;
         PhotonNetwork.CreateRoom("test", new RoomOptions { MaxPlayers = 2 });
     }
