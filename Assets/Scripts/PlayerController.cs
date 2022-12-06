@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static int MaxHealth = 10;
     public int health = MaxHealth;
+    public int balls;
     public InteractiveObject interactObj;
     public GameObject spawnPoint;
 
@@ -16,13 +18,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private AudioSource audioSource;
     private PlayerMovement movementController;
     private Weapon weapon;
+    private PlayerController killedBy;
     [SerializeField]
     private GameObject playerUIprefab;
 
     public static int InitialBall = 0;
     public int ball = InitialBall;
     [SerializeField]
+    private GameObject RespawnUIprefab;
+    [SerializeField]
     private float knockbackPower;
+    [SerializeField]
+    private int respawnTime;
     private bool isAlive = true;
     private bool isAttacking;
     private bool isInteract;
@@ -106,21 +113,44 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void Dead()
     {
-        //gameover;
         isAlive = false;
-        Debug.Log($"{photonView.Owner.NickName} is retired");
+        if (photonView.IsMine)
+        {
+            Debug.Log(killedBy.photonView.Owner.NickName);
+            killedBy.balls += balls;
+            balls = 0;
+        }
         movementController.SetActive(false);
         animator.SetTrigger("Death");
         StartCoroutine("Respown");
     }
 
     private IEnumerator Respown() {
-        yield return new WaitForSeconds(5.0f);
+        GameObject respawnUIObject = null;
+        Text respawnUI = null;
+        if (photonView.IsMine)
+        {
+            respawnUIObject = Instantiate(RespawnUIprefab);
+            respawnUIObject.transform.SetParent(GameObject.Find("Canvas").transform, false);
+            respawnUI = respawnUIObject.GetComponent<Text>();
+        }
+        for (int i = respawnTime; i > 0; i--) {
+            if (respawnUI) {
+                //Debug.Log($"Respwn... {i}");
+                respawnUI.text = $"Respwn... {i}";
+            }
+            yield return new WaitForSeconds(1.0f);
+        }
         isAlive = true;
         health = MaxHealth;
+        killedBy = null;
         movementController.SetActive(true);
         transform.position = spawnPoint.transform.position;
         animator.SetTrigger("Respawn");
+        if (photonView.IsMine)
+        {
+            Destroy(respawnUIObject);
+        }
     }
 
     [PunRPC]
@@ -134,14 +164,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!photonView.IsMine)
-        {
-            return;
-        }
 
         if (other.gameObject.tag == "Weapon" && other.gameObject != weapon)
         {
             photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(other.transform.position));
+            killedBy = other.gameObject.GetComponentInParent<PlayerController>();
         }
         
     }
