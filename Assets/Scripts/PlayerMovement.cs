@@ -7,6 +7,7 @@ using System.Threading;
 
 public class PlayerMovement : MonoBehaviourPunCallbacks
 {
+
     private Rigidbody rigid;
     private Animator animator;
     [SerializeField]
@@ -22,8 +23,8 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     [SerializeField]
     private float lookSensitivity;
     private bool isJumping;
-    [SerializeField]
     private bool isGrounded;
+    private bool active;
 
 
 
@@ -39,12 +40,14 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (photonView.IsMine || !PhotonNetwork.IsConnected) {
             camera.OnStartFollowing();
         }
+
+        active = true;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if ((!photonView.IsMine && PhotonNetwork.IsConnected)) {
+        if ((!photonView.IsMine && PhotonNetwork.IsConnected) || !active) {
             return;
         }
         processInputs();
@@ -52,7 +55,7 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         Rotation();
     }
 
-    private void LateUpdate()
+    void LateUpdate()
     {
         animator.ResetTrigger("Jump");
     }
@@ -102,5 +105,9 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         {
             isGrounded = false;
         }
+    }
+
+    public void SetActive(bool flag) {
+        active = flag;
     }
 }

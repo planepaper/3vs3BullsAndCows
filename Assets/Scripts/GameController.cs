@@ -18,6 +18,9 @@ public class GameController : MonoBehaviourPunCallbacks
         GameObject[] ball3 = GameObject.FindGameObjectsWithTag("ball3");
         GameObject[] ball4 = GameObject.FindGameObjectsWithTag("ball4");
         Instance = this;
+        player = PhotonNetwork.Instantiate("Player", new Vector3(-172, 5f, 225), Quaternion.identity);
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         for(int i = 0; i < 10; i++)
         {
             ball1[i].SetActive(false);
@@ -63,6 +66,5 @@ public class GameController : MonoBehaviourPunCallbacks
                 }
                 break;
         }
-        player = PhotonNetwork.Instantiate("Player", new Vector3(-158f, 5f, 250f), Quaternion.identity);
     }
 }

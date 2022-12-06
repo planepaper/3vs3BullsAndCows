@@ -8,11 +8,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public static int MaxHealth = 10;
     public int health = MaxHealth;
     public InteractiveObject interactObj;
+    public GameObject spawnPoint;
 
     private Animator animator;
-    private Collider collider;
+    private Collider collid;
     private Rigidbody rigid;
     private AudioSource audioSource;
+    private PlayerMovement movementController;
     private Weapon weapon;
     [SerializeField]
     private GameObject playerUIprefab;
@@ -29,10 +31,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     void Start()
     {
         animator = GetComponent<Animator>();
-        collider = GetComponent<CapsuleCollider>();
+        collid = GetComponent<CapsuleCollider>();
         rigid = GetComponent<Rigidbody>();
         weapon = GetComponentInChildren<Weapon>();
         audioSource = GetComponent<AudioSource>();
+        movementController = GetComponent<PlayerMovement>();
+
+        spawnPoint = GameObject.Find("SpawnPoint/Point1");
         if (playerUIprefab)
         {
             GameObject _ui = Instantiate(playerUIprefab);
@@ -104,17 +109,27 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         //gameover;
         isAlive = false;
         Debug.Log($"{photonView.Owner.NickName} is retired");
+        movementController.SetActive(false);
         animator.SetTrigger("Death");
-
+        StartCoroutine("Respown");
     }
 
+    private IEnumerator Respown() {
+        yield return new WaitForSeconds(5.0f);
+        isAlive = true;
+        health = MaxHealth;
+        movementController.SetActive(true);
+        transform.position = spawnPoint.transform.position;
+        animator.SetTrigger("Respawn");
+    }
+
+    [PunRPC]
     private void OnDamaged(Vector3 hitPoint) {
         Vector3 direction = new Vector3(transform.position.x - hitPoint.x, 0, transform.position.z - hitPoint.z).normalized;
-        Debug.Log(direction);
         rigid.AddForce(knockbackPower * direction, ForceMode.Impulse);
         health -= 1;
         audioSource.Play();
-        Debug.Log($"{photonView.Owner.NickName}가 맞았습니다.\n 현재체력 : {health}");
+        //Debug.Log($"{photonView.Owner.NickName}가 맞았습니다.\n 현재체력 : {health}");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -126,7 +141,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (other.gameObject.tag == "Weapon" && other.gameObject != weapon)
         {
-            OnDamaged(collider.ClosestPoint(other.transform.position));
+            photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(other.transform.position));
         }
         
     }

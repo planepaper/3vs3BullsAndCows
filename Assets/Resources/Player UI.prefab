@@ -379,7 +379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNameText: {fileID: 1301549805301444193}
   PlayerHealthSlider: {fileID: 127252235402046812}
-  screenOffset: {x: 0, y: 200, z: 0}
+  screenOffset: {x: 0, y: 30, z: 0}
   characterControllerHeight: 0
   ballAmountText: {fileID: 5805503771672265379}
 --- !u!1 &7621206572410419835

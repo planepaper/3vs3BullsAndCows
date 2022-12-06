@@ -43,6 +43,7 @@ MonoBehaviour:
   - ActionHitting
   - Attack
   - Dead
+  - OnDamaged
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -10,10 +10,11 @@ public class PlayerUI : MonoBehaviour
     private Text playerNameText;
     [SerializeField]
     private Slider PlayerHealthSlider;
+    private GameObject fillArea;
     [SerializeField]
-    private Vector3 screenOffset = new Vector3(0f, 30f, 0f);
-    [SerializeField]
-    private float characterControllerHeight = 0f;
+    private Vector3 screenOffset;
+    private float characterControllerHeight = 1.4f;
+
     [SerializeField]
     private Text ballAmountText;
     private PlayerController target;
@@ -21,6 +22,7 @@ public class PlayerUI : MonoBehaviour
     private void Awake()
     {
         this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
+        fillArea = transform.Find("Fill Area").gameObject;
         PlayerHealthSlider.interactable = false;
         PlayerHealthSlider.maxValue = PlayerController.MaxHealth;
         ballAmountText.text = PlayerController.InitialBall.ToString();
@@ -31,8 +33,12 @@ public class PlayerUI : MonoBehaviour
         if (PlayerHealthSlider) {
             PlayerHealthSlider.value = target.health;
         }
-        if (PlayerHealthSlider.value <= 0) {
-            transform.Find("Fill Area").gameObject.SetActive(false);
+        if (PlayerHealthSlider.value <= 0)
+        {
+            fillArea.SetActive(false);
+        }
+        else {
+            fillArea.SetActive(true);
         }
         if (!target) {
             Destroy(this.gameObject);
