@@ -182,8 +182,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         GameObject otherObject = other.gameObject;
         if (otherObject.tag == "Weapon")
         {
-            bool isMine = otherObject != weapon.gameObject;
-            bool isTeam = otherObject.GetComponent<Weapon>().team == team;
+            bool isMine = otherObject == weapon.gameObject;
+            bool isTeam = false;//otherObject.GetComponent<Weapon>().team == team;
             if (!isMine && !isTeam)
             {
                 photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(other.transform.position));
