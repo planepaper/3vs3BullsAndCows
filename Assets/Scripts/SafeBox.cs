@@ -10,8 +10,8 @@ public class SafeBox : InteractiveObject, IPunObservable
 
     public int[] fourNumbers = new int[4] { -1, -1, -1, -1 };
 
-    public int[,] guessNumbers = new int[10, 4];
-    public int[,] guessResults = new int[10, 2];
+    public int[] guessNumbers = new int[40];
+    public int[] guessResults = new int[20];
     public int textIndex = 0;
 
     private bool win = false;
@@ -56,12 +56,12 @@ public class SafeBox : InteractiveObject, IPunObservable
             {
                 char[] guessed = inputString.ToCharArray();
                 int curguess = (int)char.GetNumericValue(guessed[i]);
-                guessNumbers[textIndex, i] = curguess;
+                guessNumbers[textIndex * 4 + i] = curguess;
             }
 
             for (int i = 0; i < 2; i++)
             {
-                guessResults[textIndex, i] = guessResult[i];
+                guessResults[textIndex * 2 + i] = guessResult[i];
             }
 
             textIndex++;
@@ -91,20 +91,16 @@ public class SafeBox : InteractiveObject, IPunObservable
         if (stream.IsWriting)
         {
             stream.SendNext(fourNumbers);
+            stream.SendNext(textIndex);
             stream.SendNext(guessNumbers);
             stream.SendNext(guessResults);
-            stream.SendNext(textIndex);
-
-            stream.SendNext(win);
         }
         else
         {
             fourNumbers = (int[])stream.ReceiveNext();
-            guessNumbers = (int[,])stream.ReceiveNext();
-            guessResults = (int[,])stream.ReceiveNext();
             textIndex = (int)stream.ReceiveNext();
-
-            win = (bool)stream.ReceiveNext();
+            guessNumbers = (int[])stream.ReceiveNext();
+            guessResults = (int[])stream.ReceiveNext();
         }
     }
 }

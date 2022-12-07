@@ -102,12 +102,12 @@ public class GameController : MonoBehaviourPunCallbacks
     }
     private string MakeGuessResultString(SafeBox safebox, int i)
     {
-        string guessResult = safebox.guessNumbers[i, 0].ToString()
-    + safebox.guessNumbers[i, 1].ToString()
-    + safebox.guessNumbers[i, 2].ToString()
-    + safebox.guessNumbers[i, 3].ToString() +
-    " strike : " + safebox.guessResults[i, 0] +
-    " ball : " + safebox.guessResults[i, 1];
+        string guessResult = safebox.guessNumbers[i * 4 + 0].ToString()
+    + safebox.guessNumbers[i * 4 + 1].ToString()
+    + safebox.guessNumbers[i * 4 + 2].ToString()
+    + safebox.guessNumbers[i * 4 + 3].ToString() +
+    " strike : " + safebox.guessResults[i * 2 + 0] +
+    " ball : " + safebox.guessResults[i * 2 + 1];
 
         return guessResult;
     }
