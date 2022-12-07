@@ -33,7 +33,7 @@ public class GameController : MonoBehaviourPunCallbacks
         }
         else
         {
-            player = PhotonNetwork.Instantiate("PlayerB", new Vector3(-172, 5f, 225), Quaternion.identity);
+            player = PhotonNetwork.Instantiate("PlayerB", new Vector3(-140, 5f, 298), Quaternion.identity);
             playerController = player.gameObject.GetComponent<PlayerController>();
             playerController.spawnPoint = respownPoints[1].transform.position;
             playerController.team = 'B';
