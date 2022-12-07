@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
     public static GameController Instance;
     public GameObject player;
-    public char team;
     public List<GameObject> ballPositions;
     public List<GameObject> activeBalls;
     public List<GameObject> respownPoints;
@@ -16,6 +16,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public SafeBox safeBoxA;
     public SafeBox safeBoxB;
 
+    public Text[] teamAText;
+    public Text[] teamBText;
 
     private void Start()
     {
@@ -35,6 +37,11 @@ public class GameController : MonoBehaviourPunCallbacks
             playerController = player.gameObject.GetComponent<PlayerController>();
             playerController.spawnPoint = respownPoints[1].transform.position;
             playerController.team = 'B';
+        }
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("StartGame", RpcTarget.All);
         }
 
         Cursor.visible = false;
@@ -61,7 +68,25 @@ public class GameController : MonoBehaviourPunCallbacks
         }
     }
 
-    private void StartGame()
+    private void Update()
+    {
+
+    }
+
+    public void UpdateGuessBoard()
+    {
+        for (int i = 0; i < safeBoxA.textIndex; i++)
+        {
+            teamAText[i].text = MakeGuessResultString(safeBoxA, i);
+        }
+        for (int i = 0; i < safeBoxB.textIndex; i++)
+        {
+            teamBText[i].text = MakeGuessResultString(safeBoxB, i);
+        }
+    }
+
+    [PunRPC]
+    public void StartGame()
     {
         // Bulls And Cows Number Setting
         BullsAndCows bullsAndCows = new BullsAndCows();
@@ -74,5 +99,16 @@ public class GameController : MonoBehaviourPunCallbacks
         // Respawn Everybody to specific position
 
         // 
+    }
+    private string MakeGuessResultString(SafeBox safebox, int i)
+    {
+        string guessResult = safebox.guessNumbers[i, 0].ToString()
+    + safebox.guessNumbers[i, 1].ToString()
+    + safebox.guessNumbers[i, 2].ToString()
+    + safebox.guessNumbers[i, 3].ToString() +
+    " strike : " + safebox.guessResults[i, 0] +
+    " ball : " + safebox.guessResults[i, 1];
+
+        return guessResult;
     }
 }

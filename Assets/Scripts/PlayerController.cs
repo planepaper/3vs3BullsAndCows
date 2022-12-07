@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private bool isAlive = true;
     private bool isAttacking;
     private bool isInteract;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -68,11 +68,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             photonView.RPC("Attack", RpcTarget.All);
         }
-        if (interactObj != null)
+        if (isInteract && interactObj != null)
         {
-            interactObj.TurnOnUI();
-        }
-        if (isInteract && interactObj != null) {
             interactObj.Interact(this.gameObject);
         }
         if (health <= 0f)
@@ -101,7 +98,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             stream.SendNext(health);
             stream.SendNext(ball);
             stream.SendNext(spawnPoint);
-            
+
         }
         else
         {
@@ -131,7 +128,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         StartCoroutine("WaitRespown");
     }
 
-    private IEnumerator WaitRespown() {
+    private IEnumerator WaitRespown()
+    {
         GameObject respawnUIObject = null;
         Text respawnUI = null;
         if (photonView.IsMine)
@@ -140,8 +138,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
             respawnUIObject.transform.SetParent(GameObject.Find("Canvas").transform, false);
             respawnUI = respawnUIObject.GetComponent<Text>();
         }
-        for (int i = respawnTime; i > 0; i--) {
-            if (respawnUI) {
+        for (int i = respawnTime; i > 0; i--)
+        {
+            if (respawnUI)
+            {
                 //Debug.Log($"Respwn... {i}");
                 respawnUI.text = $"Respwn... {i}";
             }
@@ -154,7 +154,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         }
     }
 
-    private void Respown() {
+    private void Respown()
+    {
         isAlive = true;
         health = MaxHealth;
         killedBy = null;
@@ -168,7 +169,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     }
 
     [PunRPC]
-    private void OnDamaged(Vector3 hitPoint) {
+    private void OnDamaged(Vector3 hitPoint)
+    {
         Vector3 direction = new Vector3(transform.position.x - hitPoint.x, 0, transform.position.z - hitPoint.z).normalized;
         rigid.AddForce(knockbackPower * direction, ForceMode.Impulse);
         health -= 1;
@@ -182,21 +184,24 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         {
             bool isMine = otherObject != weapon.gameObject;
             bool isTeam = otherObject.GetComponent<Weapon>().team == team;
-            if (!isMine && !isTeam) {
+            if (!isMine && !isTeam)
+            {
                 photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(other.transform.position));
                 killedBy = other.gameObject.GetComponentInParent<PlayerController>();
             }
         }
-        if(otherObject.tag == "Interactive")
+        if (otherObject.tag == "Interactive")
         {
             interactObj = other.gameObject.GetComponent<InteractiveObject>();
+            interactObj.TurnOnUI();
         }
-        
+
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Interactive") {
+        if (other.gameObject.tag == "Interactive")
+        {
             interactObj.TurnOffUI();
             interactObj = null;
         }

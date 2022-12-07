@@ -16,7 +16,7 @@ public abstract class InteractiveObject : MonoBehaviourPunCallbacks
         canvas = GameObject.FindWithTag("Canvas");
     }
 
-    public void TurnOnUI()
+    public virtual void TurnOnUI()
     {
         if (isUIOpen)
         {
@@ -28,7 +28,7 @@ public abstract class InteractiveObject : MonoBehaviourPunCallbacks
         isUIOpen = true;
     }
 
-    public void TurnOffUI()
+    public virtual void TurnOffUI()
     {
         if (!isUIOpen)
         {

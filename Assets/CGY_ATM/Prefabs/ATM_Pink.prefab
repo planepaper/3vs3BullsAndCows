@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 33000013055584672}
   - component: {fileID: 23000012075041696}
   - component: {fileID: 64000013931672536}
+  - component: {fileID: 2076673503706178519}
+  - component: {fileID: 2616650609450439273}
   m_Layer: 0
   m_Name: ATM_Pink
   m_TagString: Untagged
@@ -98,3 +100,40 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 9c9c01ea5d9bcf74db52c9818f202508, type: 3}
+--- !u!114 &2076673503706178519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013113291574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f446a6609d3a49e4bee500fc12358e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiPrefab: {fileID: 2078022068724284118, guid: 998da107ffd004edea75ba160efa3c1e, type: 3}
+  guessResultTexts: []
+--- !u!114 &2616650609450439273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1000013113291574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 2076673503706178519}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
