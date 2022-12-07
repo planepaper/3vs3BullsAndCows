@@ -7,17 +7,19 @@ public abstract class InteractiveObject : MonoBehaviourPunCallbacks
 {
     [SerializeField]
     GameObject uiPrefab;
-    GameObject ui;
+    protected GameObject ui;
     protected GameObject canvas;
-    bool isUIOpen= false;
+    bool isUIOpen = false;
 
     protected void Start()
     {
         canvas = GameObject.FindWithTag("Canvas");
     }
 
-    public void TurnOnUI() {
-        if (isUIOpen) {
+    public void TurnOnUI()
+    {
+        if (isUIOpen)
+        {
             return;
         }
         Debug.Log("UI 호출");

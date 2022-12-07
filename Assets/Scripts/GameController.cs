@@ -13,6 +13,8 @@ public class GameController : MonoBehaviourPunCallbacks
     public List<GameObject> activeBalls;
     public List<GameObject> respownPoints;
 
+    public SafeBox safeBoxA;
+    public SafeBox safeBoxB;
 
 
     private void Start()
@@ -57,5 +59,20 @@ public class GameController : MonoBehaviourPunCallbacks
             }
             activeBalls.Add(PhotonNetwork.Instantiate("Baseball", pos.position, Quaternion.identity));
         }
+    }
+
+    private void StartGame()
+    {
+        // Bulls And Cows Number Setting
+        BullsAndCows bullsAndCows = new BullsAndCows();
+
+        safeBoxA.SetFourNumbers(bullsAndCows.GetRandomNumber());
+        safeBoxB.SetFourNumbers(bullsAndCows.GetRandomNumber());
+
+
+
+        // Respawn Everybody to specific position
+
+        // 
     }
 }
