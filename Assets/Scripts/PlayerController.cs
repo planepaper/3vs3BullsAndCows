@@ -85,6 +85,17 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         animator.ResetTrigger("Attack");
     }
 
+    public bool UseBall() {
+        if (ball > 0)
+        {
+            ball--;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     private void processInputs()
     {
         isAttacking = Input.GetButtonDown("Fire1");
