@@ -4,9 +4,14 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviourPunCallbacks
 {
+    // 서버
+    public bool teamAFinishGame = false;
+    public bool teamBFinishGame = false;
+
     public static GameController Instance;
     public GameObject player;
     public List<GameObject> ballPositions;
@@ -70,18 +75,50 @@ public class GameController : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-
+        if (teamAFinishGame)
+        {
+            SceneManager.LoadScene("TeamAScene");
+        }
+        if (teamBFinishGame)
+        {
+            SceneManager.LoadScene("TeamBScene");
+        }
     }
 
+    [PunRPC]
     public void UpdateGuessBoard()
+    {
+        photonView.RPC("UpdateGuessBoardImpl", RpcTarget.All);
+    }
+
+    public void UpdateGuessBoardImpl()
     {
         for (int i = 0; i < safeBoxA.textIndex; i++)
         {
             teamAText[i].text = MakeGuessResultString(safeBoxA, i);
+
+            if (safeBoxA.guessNumbers[i * 4 + 0] == safeBoxA.fourNumbers[0] &&
+            safeBoxA.guessNumbers[i * 4 + 1] == safeBoxA.fourNumbers[1] &&
+            safeBoxA.guessNumbers[i * 4 + 2] == safeBoxA.fourNumbers[2] &&
+            safeBoxA.guessNumbers[i * 4 + 3] == safeBoxA.fourNumbers[3])
+            {
+
+                teamAFinishGame = true;
+            }
+
         }
         for (int i = 0; i < safeBoxB.textIndex; i++)
         {
             teamBText[i].text = MakeGuessResultString(safeBoxB, i);
+
+            if (safeBoxB.guessNumbers[i * 4 + 0] == safeBoxB.fourNumbers[0] &&
+            safeBoxB.guessNumbers[i * 4 + 1] == safeBoxB.fourNumbers[1] &&
+            safeBoxB.guessNumbers[i * 4 + 2] == safeBoxB.fourNumbers[2] &&
+            safeBoxB.guessNumbers[i * 4 + 3] == safeBoxB.fourNumbers[3])
+            {
+
+                teamAFinishGame = true;
+            }
         }
     }
 
@@ -110,5 +147,19 @@ public class GameController : MonoBehaviourPunCallbacks
     " ball : " + safebox.guessResults[i * 2 + 1];
 
         return guessResult;
+    }
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(teamAFinishGame);
+            stream.SendNext(teamBFinishGame);
+        }
+        else
+        {
+            teamAFinishGame = (bool)stream.ReceiveNext();
+            teamBFinishGame = (bool)stream.ReceiveNext();
+        }
     }
 }

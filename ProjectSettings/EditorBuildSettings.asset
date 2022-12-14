@@ -7,8 +7,14 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/NetworkRoomScene.unity
-    guid: 1c9d96a0dbe7d4d089fb99a68a91fde8
+    guid: f92f344509dc14a79846cb7e455a61fa
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/TeamAWinScene.unity
+    guid: a332a4fb677674f48b9c559ee6898a96
+  - enabled: 1
+    path: Assets/Scenes/TeamBWinScene.unity
+    guid: 2ebfaa70838964afe8018057f1675d87
   m_configObjects: {}

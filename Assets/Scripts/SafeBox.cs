@@ -19,6 +19,8 @@ public class SafeBox : InteractiveObject, IPunObservable
     protected GameObject inputUI;
     private InputField inputField;
 
+    private PlayerController usingPlayer = null;
+
     public override void TurnOnUI()
     {
         base.TurnOnUI();
@@ -41,8 +43,10 @@ public class SafeBox : InteractiveObject, IPunObservable
             Debug.Log(input.text);
         }
         string inputString = input.text;
-        photonView.RPC("GuessNumber", RpcTarget.All, inputString);
-
+        if (usingPlayer.UseBall())
+        {
+            photonView.RPC("GuessNumber", RpcTarget.All, inputString);
+        }
     }
 
     [PunRPC]
@@ -102,5 +106,18 @@ public class SafeBox : InteractiveObject, IPunObservable
             guessNumbers = (int[])stream.ReceiveNext();
             guessResults = (int[])stream.ReceiveNext();
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (usingPlayer == null)
+        {
+            usingPlayer = other.gameObject.GetComponent<PlayerController>();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        usingPlayer = null;
     }
 }
