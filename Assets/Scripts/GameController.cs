@@ -77,11 +77,15 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         if (teamAFinishGame)
         {
-            SceneManager.LoadScene("TeamAScene");
+            Debug.Log("teama");
+            // PhotonNetwork.LoadLevel("TeamAWinScene");
+            SceneManager.LoadScene("TeamAWinScene");
         }
         if (teamBFinishGame)
         {
-            SceneManager.LoadScene("TeamBScene");
+            Debug.Log("teamb");
+            // PhotonNetwork.LoadLevel("TeamBWinScene");
+            SceneManager.LoadScene("TeamBWinScene");
         }
     }
 
@@ -96,21 +100,20 @@ public class GameController : MonoBehaviourPunCallbacks
     {
         for (int i = 0; i < safeBoxA.textIndex; i++)
         {
-            teamAText[i].text = MakeGuessResultString(safeBoxA, i);
-
+            teamBText[i].text = MakeGuessResultString(safeBoxA, i);
             if (safeBoxA.guessNumbers[i * 4 + 0] == safeBoxA.fourNumbers[0] &&
             safeBoxA.guessNumbers[i * 4 + 1] == safeBoxA.fourNumbers[1] &&
             safeBoxA.guessNumbers[i * 4 + 2] == safeBoxA.fourNumbers[2] &&
             safeBoxA.guessNumbers[i * 4 + 3] == safeBoxA.fourNumbers[3])
             {
-
-                teamAFinishGame = true;
+                Debug.Log("haha");
+                teamBFinishGame = true;
             }
 
         }
         for (int i = 0; i < safeBoxB.textIndex; i++)
         {
-            teamBText[i].text = MakeGuessResultString(safeBoxB, i);
+            teamAText[i].text = MakeGuessResultString(safeBoxB, i);
 
             if (safeBoxB.guessNumbers[i * 4 + 0] == safeBoxB.fourNumbers[0] &&
             safeBoxB.guessNumbers[i * 4 + 1] == safeBoxB.fourNumbers[1] &&
