@@ -18,7 +18,7 @@ public abstract class InteractiveObject : MonoBehaviourPunCallbacks
 
     public virtual void TurnOnUI()
     {
-        if (isUIOpen)
+        if (isUIOpen || !photonView.IsMine)
         {
             return;
         }
@@ -30,7 +30,7 @@ public abstract class InteractiveObject : MonoBehaviourPunCallbacks
 
     public virtual void TurnOffUI()
     {
-        if (!isUIOpen)
+        if (!isUIOpen || !photonView.IsMine)
         {
             return;
         }
