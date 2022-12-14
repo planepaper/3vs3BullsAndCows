@@ -91,6 +91,7 @@ public class GameController : MonoBehaviourPunCallbacks
         photonView.RPC("UpdateGuessBoardImpl", RpcTarget.All);
     }
 
+    [PunRPC]
     public void UpdateGuessBoardImpl()
     {
         for (int i = 0; i < safeBoxA.textIndex; i++)
