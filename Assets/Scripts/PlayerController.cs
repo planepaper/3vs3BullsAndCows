@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using Photon.Pun;
+using Photon.Pun.Demo.PunBasics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
+    
     public static int MaxHealth = 10;
     public static int InitialBall = 0;
     public int health = MaxHealth;
@@ -14,6 +16,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     public Vector3 spawnPoint;
     public char team;
 
+    //컴포넌트
     private Animator animator;
     private Collider collid;
     private Rigidbody rigid;
@@ -21,15 +24,19 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private PlayerMovement movementController;
     private Weapon weapon;
     private PlayerController killedBy;
-    [SerializeField]
-    private GameObject playerUIprefab;
 
+    // UI관련 컴포넌트, 프리팹
     [SerializeField]
     private GameObject RespawnUIprefab;
+    private PlayerUI playerUI;
+
+
     [SerializeField]
     private float knockbackPower;
     [SerializeField]
     private int respawnTime;
+
+    // 상태변수
     private bool isAlive = true;
     private bool isAttacking;
     private bool isInteract;
@@ -43,16 +50,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         weapon = GetComponentInChildren<Weapon>();
         audioSource = GetComponent<AudioSource>();
         movementController = GetComponent<PlayerMovement>();
+        playerUI = FindObjectOfType<PlayerUI>();
+        playerUI.SetTarget(this);
         weapon.team = team;
-        if (playerUIprefab)
-        {
-            GameObject _ui = Instantiate(playerUIprefab);
-            _ui.SendMessage("SetTarget", this, SendMessageOptions.RequireReceiver);
-        }
-        else
-        {
-            Debug.LogWarning("<Color=Red><a>Missing</a></Color> PlayerUIPrefab reference on player Prefab", this);
-        }
     }
 
     // Update is called once per frame

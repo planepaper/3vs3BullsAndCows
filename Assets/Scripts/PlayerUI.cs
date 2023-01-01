@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -13,17 +14,11 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     private GameObject fillArea;
     [SerializeField]
-    private Vector3 screenOffset;
-    private float characterControllerHeight = 1.4f;
-
-    [SerializeField]
     private Text ballAmountText;
     private PlayerController target;
 
     private void Awake()
     {
-        //this.transform.SetParent(GameObject.Find("Canvas").GetComponent<Transform>(), false);
-        //fillArea = transform.Find("Fill Area").gameObject;
         PlayerHealthSlider.interactable = false;
         PlayerHealthSlider.maxValue = PlayerController.MaxHealth;
         ballAmountText.text = PlayerController.InitialBall.ToString();
@@ -31,6 +26,10 @@ public class PlayerUI : MonoBehaviour
 
     void Update()
     {
+        if (!target)
+        {
+            return;
+        }
         if (PlayerHealthSlider) {
             PlayerHealthSlider.value = target.health;
         }
@@ -47,18 +46,6 @@ public class PlayerUI : MonoBehaviour
         }
         ballAmountText.text = target.ball.ToString();
     }
-    private void LateUpdate()
-    {
-        if (target) {
-            Vector3 targetPosition;
-            targetPosition = target.transform.position;
-            targetPosition.y += characterControllerHeight;
-            this.transform.position = targetPosition;
-            this.transform.LookAt(Camera.main.transform);
-
-            //this.transform.position = Camera.main.WorldToScreenPoint(targetPosition) + screenOffset;
-        }
-    }
 
     public void SetTarget(PlayerController _target) {
         if (!_target) {
@@ -66,10 +53,5 @@ public class PlayerUI : MonoBehaviour
         }
         target = _target;
         playerNameText.text = target.photonView.Owner.NickName;
-
-        CharacterController _charactorController = _target.GetComponent<CharacterController>();
-        if (_charactorController) {
-            characterControllerHeight = _charactorController.height;
-        }
     }
 }
