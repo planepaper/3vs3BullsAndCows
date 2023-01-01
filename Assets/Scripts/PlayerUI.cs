@@ -16,12 +16,14 @@ public class PlayerUI : MonoBehaviour
     [SerializeField]
     private Text ballAmountText;
     private PlayerController target;
+    private Camera mainCamera;
 
     private void Awake()
     {
         PlayerHealthSlider.interactable = false;
         PlayerHealthSlider.maxValue = PlayerController.MaxHealth;
         ballAmountText.text = PlayerController.InitialBall.ToString();
+        mainCamera = FindObjectOfType<Camera>();
     }
 
     void Update()
@@ -45,6 +47,8 @@ public class PlayerUI : MonoBehaviour
             return;
         }
         ballAmountText.text = target.ball.ToString();
+
+        transform.LookAt(mainCamera.transform.position);
     }
 
     public void SetTarget(PlayerController _target) {
