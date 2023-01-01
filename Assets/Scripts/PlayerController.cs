@@ -57,7 +57,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         respawnUI = Instantiate(RespawnUIprefab);
         respawnUI.transform.SetParent(GameObject.Find("Canvas").transform, false);
         respawnUI.SetActive(false);
-        weapon.team = team;
     }
 
     // Update is called once per frame
@@ -128,6 +127,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void Attack()
     {
+
         animator.SetTrigger("Attack");
         weapon.Attack();
     }
@@ -136,25 +136,31 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Dead()
     {
         isAlive = false;
-        Debug.Log(killedBy.photonView.Owner.NickName);
-        killedBy.ball += ball;
+        if(killedBy != null)
+            killedBy.ball += ball;
         ball = 0;
         movementController.SetActive(false);
         animator.SetTrigger("Death");
-        StartCoroutine("WaitRespown");
+        StartCoroutine(EnableRespownUI());
     }
 
-    private IEnumerator WaitRespown()
+    private IEnumerator EnableRespownUI()
     {
-        Text UItext = null;
-        respawnUI.SetActive(true);
-        UItext = respawnUI.GetComponent<Text>();
-        for (int i = respawnTime; i > 0; i--)
+        if (photonView.IsMine)
         {
-            UItext.text = $"Respwn... {i}";
-            yield return new WaitForSeconds(1.0f);
+            respawnUI.SetActive(true);
+            Text UItext = respawnUI.GetComponent<Text>();
+            for (int i = respawnTime; i > 0; i--)
+            {
+                UItext.text = $"Respwn... {i}";
+                yield return new WaitForSeconds(1.0f);
+            }
+            respawnUI.SetActive(false);
         }
-        respawnUI.SetActive(false);
+        else
+        {
+            yield return new WaitForSeconds(respawnTime);
+        }
         Respown();
     }
 
@@ -165,11 +171,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         killedBy = null;
         movementController.SetActive(true);
         animator.SetTrigger("Respawn");
-        if (photonView.IsMine)
-        {
-            transform.position = spawnPoint;
-        }
+        transform.position = spawnPoint;
+    }
 
+    //야구배트 피격 관련 함수들
+    public void OnHit(PlayerController hitBy, Vector3 hitPoint) {
+        photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(hitPoint));
+        killedBy = hitBy;
     }
 
     [PunRPC]
@@ -184,22 +192,11 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void OnTriggerEnter(Collider other)
     {
         GameObject otherObject = other.gameObject;
-        if (otherObject.tag == "Weapon")
-        {
-            bool isMine = otherObject == weapon.gameObject;
-            bool isTeam = otherObject.GetComponent<Weapon>().team == team;
-            if (!isMine)
-            {
-                photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(other.transform.position));
-                killedBy = other.gameObject.GetComponentInParent<PlayerController>();
-            }
-        }
         if (otherObject.tag == "Interactive")
         {
             interactObj = other.gameObject.GetComponent<InteractiveObject>();
             interactObj.TurnOnUI();
         }
-
     }
 
     private void OnTriggerExit(Collider other)

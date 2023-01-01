@@ -1158,7 +1158,7 @@ GameObject:
   - component: {fileID: 2874675221720507562}
   - component: {fileID: 3448239219356628026}
   m_Layer: 0
-  m_Name: Mob_BaseBall_Bat_LOD_0
+  m_Name: BaseBall Bat
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1255,7 +1255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8f1ffcded7a04e0ba870552be0bf9e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  team: 0
+  owner: {fileID: 8975113203410215706}
 --- !u!82 &3448239219356628026
 AudioSource:
   m_ObjectHideFlags: 0
