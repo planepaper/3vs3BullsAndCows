@@ -25,11 +25,13 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private Weapon weapon;
     private PlayerController killedBy;
 
-    // UI°ü·Ã ÄÄÆ÷³ÍÆ®, ÇÁ¸®ÆÕ
-    [SerializeField]
-    private GameObject RespawnUIprefab;
+    // UI°ü·Ã ÄÄÆ÷³ÍÆ®
+    private GameObject respawnUI;
     private PlayerUI playerUI;
 
+    // ÇÁ¸®ÆÕ
+    [SerializeField]
+    private GameObject RespawnUIprefab;
 
     [SerializeField]
     private float knockbackPower;
@@ -52,6 +54,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         movementController = GetComponent<PlayerMovement>();
         playerUI = FindObjectOfType<PlayerUI>();
         playerUI.SetTarget(this);
+        respawnUI = Instantiate(RespawnUIprefab);
+        respawnUI.transform.SetParent(GameObject.Find("Canvas").transform, false);
+        respawnUI.SetActive(false);
         weapon.team = team;
     }
 
@@ -141,28 +146,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private IEnumerator WaitRespown()
     {
-        GameObject respawnUIObject = null;
-        Text respawnUI = null;
-        if (photonView.IsMine)
-        {
-            respawnUIObject = Instantiate(RespawnUIprefab);
-            respawnUIObject.transform.SetParent(GameObject.Find("Canvas").transform, false);
-            respawnUI = respawnUIObject.GetComponent<Text>();
-        }
+        Text UItext = null;
+        respawnUI.SetActive(true);
+        UItext = respawnUI.GetComponent<Text>();
         for (int i = respawnTime; i > 0; i--)
         {
-            if (respawnUI)
-            {
-                //Debug.Log($"Respwn... {i}");
-                respawnUI.text = $"Respwn... {i}";
-            }
+            UItext.text = $"Respwn... {i}";
             yield return new WaitForSeconds(1.0f);
         }
+        respawnUI.SetActive(false);
         Respown();
-        if (photonView.IsMine)
-        {
-            Destroy(respawnUIObject);
-        }
     }
 
     private void Respown()
