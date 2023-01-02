@@ -11,8 +11,6 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     private Rigidbody rigid;
     private Animator animator;
     [SerializeField]
-    private Weapon weapon;
-    [SerializeField]
     public LayerMask ground;
     [SerializeField]
     public float groundDistance;
@@ -34,13 +32,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
     {
         rigid = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        weapon = GetComponentInChildren<Weapon>();
-        //character = GetComponent<CharacterController>();
         CameraMovement camera = GetComponent<CameraMovement>();
         if (photonView.IsMine || !PhotonNetwork.IsConnected) {
             camera.OnStartFollowing();
         }
-
         active = true;
     }
 
@@ -95,19 +90,10 @@ public class PlayerMovement : MonoBehaviourPunCallbacks
         if (yRotation != 0) {
             transform.rotation = transform.rotation * Quaternion.Euler(charactorRotationY);
         }
-        
     }
 
     private void checkGround() {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, groundDistance, ground))
-        {
-            isGrounded = true;
-        }
-        else
-        {
-            isGrounded = false;
-        }
+        isGrounded = Physics.Raycast(transform.position + Vector3.up, Vector3.down, groundDistance, ground);
     }
 
     public void SetActive(bool flag) {

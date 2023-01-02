@@ -70,7 +70,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
         if (isAttacking)
         {
-            photonView.RPC("Attack", RpcTarget.All);
+            photonView.RPC(nameof(Attack), RpcTarget.All);
         }
         if (isInteract && interactObj != null)
         {
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         }
         if (health <= 0f)
         {
-            photonView.RPC("Dead", RpcTarget.All);
+            photonView.RPC(nameof(Dead), RpcTarget.All);
             return;
         }
 
@@ -102,8 +102,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void processInputs()
     {
-        isAttacking = Input.GetButtonDown("Fire1");
-        isInteract = Input.GetButtonDown("Interact");
+        isAttacking = Input.GetKeyDown(KeyCode.Mouse0);
+        isInteract = Input.GetKeyDown(KeyCode.E);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -127,7 +127,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     [PunRPC]
     private void Attack()
     {
-
         animator.SetTrigger("Attack");
         weapon.Attack();
     }
@@ -176,7 +175,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     //야구배트 피격 관련 함수들
     public void OnHit(PlayerController hitBy, Vector3 hitPoint) {
-        photonView.RPC("OnDamaged", RpcTarget.All, collid.ClosestPoint(hitPoint));
+        photonView.RPC(nameof(OnDamaged), RpcTarget.All, collid.ClosestPoint(hitPoint));
         killedBy = hitBy;
     }
 
