@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private bool isInteract;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         animator = GetComponent<Animator>();
         collid = GetComponent<CapsuleCollider>();
@@ -53,11 +53,16 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         weapon = GetComponentInChildren<Weapon>();
         audioSource = GetComponent<AudioSource>();
         movementController = GetComponent<PlayerMovement>();
-        playerUI = FindObjectOfType<PlayerUI>();
+
+        playerUI = GetComponentInChildren<PlayerUI>();
         playerUI.SetTarget(this);
-        respawnUI = Instantiate(RespawnUIprefab);
-        respawnUI.transform.SetParent(GameObject.Find("Canvas").transform, false);
-        respawnUI.SetActive(false);
+
+        if (photonView.IsMine)
+        {
+            respawnUI = Instantiate(RespawnUIprefab);
+            respawnUI.transform.SetParent(GameObject.Find("Canvas").transform, false);
+            respawnUI.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -65,7 +70,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         if ((!photonView.IsMine && PhotonNetwork.IsConnected) || !isAlive) return;
         
-
         isAttacking = Input.GetKeyDown(KeyCode.Mouse0);
         if (isAttacking)
         {
@@ -89,13 +93,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         animator.ResetTrigger("Attack");
     }
 
+    //공 관련
+    public void AddBall() {
+        ball++;
+    }
     public bool UseBall() {
         if (ball > 0)
         {
             ball--;
             return true;
         }
-        else {
+        else
+        {
             return false;
         }
     }
@@ -125,6 +134,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         weapon.Swing();
     }
 
+    // 리스폰 관련
     [PunRPC]
     private void Dead()
     {

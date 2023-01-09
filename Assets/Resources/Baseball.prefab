@@ -312,7 +312,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419093f11bfa5427c8fd7d5d3a356571, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uiPrefab: {fileID: 4580082779348702495, guid: 340d388ad249a438d97363bf60b780ac, type: 3}
+  collisionUIPrefab: {fileID: 4580082779348702495, guid: 340d388ad249a438d97363bf60b780ac, type: 3}
 --- !u!114 &4923606554419916610
 MonoBehaviour:
   m_ObjectHideFlags: 0
