@@ -184,17 +184,18 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 
     private void OnTriggerEnter(Collider other)
     {
-        GameObject otherObject = other.gameObject;
-        if (otherObject.tag == "Interactive")
+        InteractiveObject otherObject = other.gameObject.GetComponent<InteractiveObject>();
+        if (otherObject)
         {
-            interactObj = other.gameObject.GetComponent<InteractiveObject>();
+            interactObj = otherObject;
             interactObj.TurnOnUI();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Interactive")
+        InteractiveObject otherObject = other.gameObject.GetComponent<InteractiveObject>();
+        if (otherObject)
         {
             interactObj.TurnOffUI();
             interactObj = null;
