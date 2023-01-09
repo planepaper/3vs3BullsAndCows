@@ -50,6 +50,7 @@ MonoBehaviour:
   - StartGame
   - UpdateGuessBoard
   - UpdateGuessBoardImpl
+  - RemoveBall
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

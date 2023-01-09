@@ -46,6 +46,7 @@ public class NetworkController : MonoBehaviourPunCallbacks
         {
             connectText.text = "Connect to Room";
             connectButton.enabled = false;
+            PhotonNetwork.NickName = playerNameInputField.text;
             PhotonNetwork.JoinRandomRoom();
         }
     }
@@ -53,7 +54,6 @@ public class NetworkController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         connectText.text = "Success to join in the room";
-        PhotonNetwork.NickName = playerNameInputField.text;
         PhotonNetwork.LoadLevel("SampleScene");
     }
 
