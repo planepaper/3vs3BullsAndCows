@@ -17,13 +17,13 @@ public class Weapon : MonoBehaviour
         weaponCollider.enabled = false;
     }
 
-    public void Attack() {
-        StopCoroutine(Swing());
-        StartCoroutine(Swing());
+    public void Swing() {
+        StopCoroutine(SwingCoroutine());
+        StartCoroutine(SwingCoroutine());
     }
 
     // 0.15뒤 collider 활성화 0.30뒤 비활성화
-    private IEnumerator Swing() {
+    private IEnumerator SwingCoroutine() {
         yield return new WaitForSeconds(0.10f);
         audioSource.Play();
         weaponCollider.enabled = true;
@@ -33,12 +33,11 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        GameObject otherObject = other.gameObject;
-        if (otherObject.tag == "Player")
+        PlayerController otherPlayer = other.gameObject.GetComponent<PlayerController>();
+        if (otherPlayer)
         {
-            PlayerController otherPlayer = otherObject.GetComponent<PlayerController>();
-            bool isMine = otherObject == owner;
-            bool isTeam = otherPlayer.team == owner.team;
+            bool isMine = otherPlayer == owner;
+            //bool isTeam = otherPlayer.team == owner.team;
             if (!isMine)
             {
                 otherPlayer.OnHit(owner, other.transform.position);

@@ -21,8 +21,7 @@ public class PlayerUI : MonoBehaviour
     private void Awake()
     {
         PlayerHealthSlider.interactable = false;
-        PlayerHealthSlider.maxValue = PlayerController.MaxHealth;
-        ballAmountText.text = PlayerController.InitialBall.ToString();
+        PlayerHealthSlider.maxValue = PlayerController.MAX_HEALTH;
         mainCamera = FindObjectOfType<Camera>();
     }
 

@@ -1437,7 +1437,7 @@ GameObject:
   - component: {fileID: 5202777904142244487}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1576,7 +1576,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef76f9cc108b42019afdfd11714ce1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
   ground:
     serializedVersion: 2
     m_Bits: 8

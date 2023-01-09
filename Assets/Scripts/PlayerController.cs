@@ -8,13 +8,14 @@ using UnityEngine.UI;
 public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
 {
     
-    public static int MaxHealth = 10;
-    public static int InitialBall = 0;
-    public int health = MaxHealth;
-    public int ball = InitialBall;
+    public const int MAX_HEALTH = 10;
+    public int health = MAX_HEALTH;
+    public int ball = 0;
+    ///
     public InteractiveObject interactObj;
     public Vector3 spawnPoint;
     public char team;
+    ///
 
     //ÄÄÆ÷³ÍÆ®
     private Animator animator;
@@ -62,26 +63,25 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     // Update is called once per frame
     void Update()
     {
-        if ((!photonView.IsMine && PhotonNetwork.IsConnected) || !isAlive)
-        {
-            return;
-        }
-        processInputs();
+        if ((!photonView.IsMine && PhotonNetwork.IsConnected) || !isAlive) return;
+        
 
+        isAttacking = Input.GetKeyDown(KeyCode.Mouse0);
         if (isAttacking)
         {
             photonView.RPC(nameof(Attack), RpcTarget.All);
         }
+
+        isInteract = Input.GetKeyDown(KeyCode.E);
         if (isInteract && interactObj != null)
         {
             interactObj.Interact(this.gameObject);
         }
+
         if (health <= 0f)
         {
             photonView.RPC(nameof(Dead), RpcTarget.All);
-            return;
         }
-
     }
 
     void LateUpdate()
@@ -98,12 +98,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
         else {
             return false;
         }
-    }
-
-    private void processInputs()
-    {
-        isAttacking = Input.GetKeyDown(KeyCode.Mouse0);
-        isInteract = Input.GetKeyDown(KeyCode.E);
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
@@ -128,7 +122,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Attack()
     {
         animator.SetTrigger("Attack");
-        weapon.Attack();
+        weapon.Swing();
     }
 
     [PunRPC]
@@ -166,7 +160,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     private void Respown()
     {
         isAlive = true;
-        health = MaxHealth;
+        health = MAX_HEALTH;
         killedBy = null;
         movementController.SetActive(true);
         animator.SetTrigger("Respawn");
